@@ -1,0 +1,44 @@
+{% set version = "3.2.3" %}
+
+package:
+  name: supervisor
+  version: "{{ version }}"
+
+source:
+  git_url: https://github.com/Supervisor/supervisor
+  git_rev: "{{ version }}"
+
+build:
+  number: 1
+  skip: true  # [win]
+
+requirements:
+  build:
+    - gettext
+    - python
+    - setuptools
+
+  run:
+    - python
+    - meld3 >=1
+
+test:
+  requires:
+    - pytest >=2.5.2
+    - mock >=0.5.0
+  source_files:
+    - supervisor/tests/
+  commands:
+    - py.test supervisor/tests/
+    - supervisord
+    - supervisorctl status
+    - supervisorctl shutdown
+
+about:
+  home: https://github.com/Supervisor/supervisor
+  license: BSD 3-clause
+  summary: Supervisor process control system for UNIX
+
+extra:
+  recipe-maintainers:
+    - sodre
